@@ -1,24 +1,24 @@
-import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router';
-import { ThemeProvider } from '@/lib/themeProvider';
+import { useAuth } from '@/lib/authProvider';
+import { Toaster } from '@/components/ui/toaster';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { Auth } from '@/pages/Auth';
 import { Profile } from '@/pages/Profile';
 
 const App: React.FC = () => {
-  const [isAuth] = useState(false);
+  const { isAuth } = useAuth();
 
   return (
-    <ThemeProvider>
+    <>
       <BrowserRouter>
         <Routes>
           <Route
             path="/"
-            element={isAuth ? <Navigate to="/profile" replace /> : <Navigate to="/auth" replace />}
+            element={<Navigate to="/auth" replace />}
           />
           <Route
             path="/auth"
-            element={<Auth />}
+            element={isAuth ? <Navigate to="/profile" replace /> : <Auth /> }
           />
           <Route
             path="/profile"
@@ -34,7 +34,8 @@ const App: React.FC = () => {
           />
         </Routes>
       </BrowserRouter>
-    </ThemeProvider>
+      <Toaster />
+    </>
   );
 };
 
