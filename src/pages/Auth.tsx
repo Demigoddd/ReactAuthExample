@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { ThemeSwitcher } from '@/components/ThemeSwitcher';
-import {
-  Card,
-  CardContent,
-} from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Tabs,
   TabsContent,

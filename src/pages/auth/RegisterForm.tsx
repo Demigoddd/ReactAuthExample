@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { AxiosError } from 'axios';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
 import {
@@ -59,11 +61,8 @@ export const RegisterForm = ({ navigateToLoginTab }: IRegisterForm) => {
       password: values.password,
     };
 
-    console.log('REGISTER DATA: ', data);
-
     registerMutation.mutate(data, {
-      onSuccess: (data) => {
-        console.log('Success:', data);
+      onSuccess: () => {
         toast({
           title: "Registration",
           description: 'You have registered successfully.'
@@ -71,7 +70,13 @@ export const RegisterForm = ({ navigateToLoginTab }: IRegisterForm) => {
         navigateToLoginTab();
       },
       onError: (error) => {
-        console.error('Error:', error);
+        const axiosError = error as AxiosError<{ message: string }>;
+
+        toast({
+          variant: "destructive",
+          title: `${axiosError.message}`,
+          description: `Error: ${axiosError?.response?.data?.message}`
+        });
       },
     });
   };
@@ -118,7 +123,14 @@ export const RegisterForm = ({ navigateToLoginTab }: IRegisterForm) => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full mt-2">Register</Button>
+        <Button
+          type="submit"
+          className="w-full mt-2"
+          disabled={registerMutation.isPending}
+        >
+          {registerMutation.isPending && <Loader2 className="animate-spin" />}
+          Register
+        </Button>
       </form>
     </Form>
   );

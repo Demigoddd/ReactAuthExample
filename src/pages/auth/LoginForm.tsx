@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { AxiosError } from 'axios';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { Loader2 } from 'lucide-react';
 import { useAuth } from '@/lib/authProvider';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -47,10 +49,8 @@ export const LoginForm = () => {
   }, [form]);
 
   const onSubmit = (values: FormSchemaType) => {
-    console.log('LOGIN DATA: ', values);
     loginMutation.mutate(values, {
       onSuccess: (data) => {
-        console.log('Success:', data);
         toast({
           title: "Login",
           description: 'You have logged successfully.'
@@ -58,7 +58,13 @@ export const LoginForm = () => {
         login(data.token);
       },
       onError: (error) => {
-        console.error('Error:', error);
+        const axiosError = error as AxiosError<{ message: string }>;
+
+        toast({
+          variant: "destructive",
+          title: `${axiosError.message}`,
+          description: `Error: ${axiosError?.response?.data?.message}`
+        });
       },
     });
   };
@@ -92,7 +98,14 @@ export const LoginForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="w-full mt-2">Login</Button>
+        <Button
+          type="submit"
+          className="w-full mt-2"
+          disabled={loginMutation.isPending}
+        >
+          {loginMutation.isPending && <Loader2 className="animate-spin" />}
+          Login
+        </Button>
       </form>
     </Form>
   );

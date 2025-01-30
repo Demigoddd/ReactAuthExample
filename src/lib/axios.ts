@@ -26,9 +26,9 @@ axios.interceptors.request.use((config) => {
 
 // Response Interceptors
 axios.interceptors.response.use(response => response, (err: AxiosError) => {
-  if (err.response && (err.response.status === HTTP_STATUS_CODES.UNAUTHORIZED)) {
+  if (err.response && err.response.status === HTTP_STATUS_CODES.UNAUTHORIZED) {
+    // Delete token when time expires
     localStorage.removeItem('token');
-    // redirect to login
   }
   return Promise.reject(err);
 });

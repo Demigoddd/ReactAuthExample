@@ -11,7 +11,7 @@ const register = async (credentials: { email: string; password: string }) => {
   return response.data;
 };
 
-const fetechProfile = async () => {
+const profile = async () => {
   const { data } = await axios.get('/profile');
   return data;
 };
@@ -30,7 +30,7 @@ export const useRegister = () => {
 
 export const useProfile = () => {
   return useQuery({
-    queryKey: ['user'],
-    queryFn: fetechProfile,
+    queryKey: ['profile'],
+    queryFn: profile,
   });
 };
