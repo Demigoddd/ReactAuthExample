@@ -27,7 +27,6 @@ npm run dev
  ├── components  # Shadcn/UI-components
  ├── pages       # Application pages
  ├── lib         # Helper functions, providers
- ├── services    # API-запросы
  ├── App.tsx     # Routing app file
  ├── main.tsx    # Initial entry app file
  ├── index.css   # Global TailwindCSS file
